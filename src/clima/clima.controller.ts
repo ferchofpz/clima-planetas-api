@@ -22,6 +22,11 @@ export class ClimaController {
         // Sequía
         reporteDto.reporte.sequia.valor = this.climaService.getTotalPeriodosSequia(annos);
 
+        // Lluvia
+        let {cantidadP, diaPico} = this.climaService.getPeriodosLluvia(annos);
+        reporteDto.reporte.lluvia[0].valor = cantidadP;
+        reporteDto.reporte.lluvia[1].valor = diaPico;
+
         return reporteDto;
     }
 }
