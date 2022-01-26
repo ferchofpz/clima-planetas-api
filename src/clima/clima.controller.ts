@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { Planetas } from 'src/interfaces/planetas.interface';
+import { Clima } from 'src/models/clima.model';
+import { Planeta } from 'src/models/planeta.model';
 import { ClimaService } from './clima.service';
 import { ReporteDto } from './dto/reporte-dto';
 
@@ -10,22 +11,19 @@ export class ClimaController {
     ){}
 
     @Get('/planetas')
-    getPlanetas(): Planetas[]{    
+    getPlanetas(): Planeta[]{    
         return this.climaService.getPlanetas();
     }
 
     @Get('reporte/:annos')
     genReporte(@Param('annos') annos: number): ReporteDto{
         let reporteDto = new ReporteDto();
+        let clima = this.climaService.genReporte(annos);
+
         reporteDto.encabezado.valor = annos;
-
-        // Sequía
-        reporteDto.reporte.sequia.valor = this.climaService.getTotalPeriodosSequia(annos);
-
-        // Lluvia
-        let {cantidadP, diaPico} = this.climaService.getPeriodosLluvia(annos);
-        reporteDto.reporte.lluvia[0].valor = cantidadP;
-        reporteDto.reporte.lluvia[1].valor = diaPico;
+        reporteDto.reporte.sequia.valor = clima.diasSequia;
+        reporteDto.reporte.lluvia[0].valor = clima.periodosLluvia;
+        reporteDto.reporte.lluvia[1].valor = clima.diaPicoLluvia;
 
         return reporteDto;
     }
