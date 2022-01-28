@@ -24,6 +24,7 @@ export class ClimaController {
         reporteDto.reporte.sequia.valor = clima.diasSequia;
         reporteDto.reporte.lluvia[0].valor = clima.periodosLluvia;
         reporteDto.reporte.lluvia[1].valor = clima.diaPicoLluvia;
+        reporteDto.reporte.optimos.cantidad = clima.diasOptimos;
 
         return reporteDto;
     }

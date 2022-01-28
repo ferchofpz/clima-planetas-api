@@ -14,10 +14,7 @@ export class ReporteDto {
         ],
         optimos: {
             descripcion: "Periodos con condiciones optimas",
-            cantidad: 0,
-            periodos: [
-                {dia: 0, temperatura: 0}
-            ]
+            cantidad: 0
         }
     };
 }
