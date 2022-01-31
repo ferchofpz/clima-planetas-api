@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { Clima } from 'src/models/clima.model';
-import { Planeta } from 'src/models/planeta.model';
+import { Dia } from '../models/dia.model';
+import { Planeta } from '../models/planeta.model';
 import { ClimaService } from './clima.service';
 import { ReporteDto } from './dto/reporte-dto';
 
@@ -27,5 +27,9 @@ export class ClimaController {
         reporteDto.reporte.optimos.cantidad = clima.diasOptimos;
 
         return reporteDto;
+    }
+    @Get('dia/:dia')
+    getDias(@Param('dia') dia: number): Dia{
+        return this.climaService.getDia(dia);
     }
 }

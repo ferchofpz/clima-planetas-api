@@ -1,48 +1,82 @@
 import { Injectable } from '@nestjs/common';
-import { Clima } from 'src/models/clima.model';
-import { Planeta } from 'src/models/planeta.model';
+import { Clima } from '../models/clima.model';
+import { Planeta } from '../models/planeta.model';
+import { Dia } from '../models/dia.model';
 
 @Injectable()
 export class ClimaService {
+
+    isLoaded: boolean = false;
+    yearsLoaded: number = 0;
 
     planetas : Planeta[] = [
         new Planeta("Ferengi",1,-1,500),
         new Planeta("Betasoide",3,-1,2000),
         new Planeta("Vulcano",5,1,1000)
     ];
+    dias: Dia[] = [];
+    clima: Clima = new Clima();
+
+    jobClima(annos: string){
+        console.log(`Ejecutando Job para ${annos} años`);
+        this.loadData(+annos);
+        // this.dias.forEach(dia => console.log(`Dia: ${dia.dia} Clima: ${dia.clima}`));
+    }
 
     getPlanetas(): Planeta[]{
         return this.planetas;
     }
 
+    getDia(dia: number): Dia{
+
+        if(!this.isLoaded || dia > (this.yearsLoaded*365))
+            this.loadData(Math.ceil(dia / 365));
+
+        return this.dias[dia-1];
+    }
+
     genReporte(annos: number): Clima{
-        let diasAnno = 365;
-        let clima: Clima = new Clima();
+        if(!this.isLoaded || annos != this.yearsLoaded)
+            this.loadData(annos);
+        return this.clima;
+    }
+
+    loadData(annos: number){
+        this.clima = new Clima;
+        this.dias.splice(0);
+        this.planetas.forEach(planeta => planeta.resetOrbita());
+        console.log(`Generando data para ${annos} años`);
 
         // Control paso del tiempo
-        this.planetas.forEach(planeta => planeta.resetOrbita());
-        for(let dia = 0; dia<(annos*diasAnno); dia++){
-            
-            if (this.haySequia())
-                ++clima.diasSequia;
-
+        for(let dia = 1; dia<=(annos*365); dia++){
             let [hayLluvia, Atotal] = this.hayLluvia();
-            if (hayLluvia){
-                ++clima.periodosLluvia
-                if(Atotal > clima.areaLluvia){
-                    clima.areaLluvia = Atotal;
-                    clima.diaPicoLluvia = dia;
-                }
-            }
 
-            if (this.esOptimo())
-                ++clima.diasOptimos;
+            if (this.haySequia()){
+                ++this.clima.diasSequia;
+                this.dias.push(new Dia(dia, "Sequia"));
+            }
+            else if (hayLluvia){
+                ++this.clima.periodosLluvia
+                this.dias.push(new Dia(dia, "Lluvia"));
+                if(Atotal > this.clima.areaLluvia){
+                    this.clima.areaLluvia = Atotal;
+                    this.clima.diaPicoLluvia = dia;
+                }
+            }                
+            else if (this.esOptimo()){
+                ++this.clima.diasOptimos;
+                this.dias.push(new Dia(dia, "Optimo"));
+            }
+            else{
+                this.dias.push(new Dia(dia, "Indefinido"));
+            }
 
             // Actualizar desplazamiento
             this.planetas.forEach(planeta => planeta.cambioOrbita());
         }
 
-        return clima;
+        this.isLoaded = true;
+        this.yearsLoaded = annos;
     }
 
     haySequia(): boolean{
