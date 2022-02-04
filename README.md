@@ -24,7 +24,16 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+<p>Predicción climática de la galaxia de los Ferengi, Betasoide y Vulcano.</p>
+
+- El API se encuentra desplegada en Heroku junto con el job que calcula el clima.
+- Fue desarrollado con Nest.js sobre Typescript.
+- La información se calcula dependiendo de la cantidad de años que se indique en el reporte o el número del día que se quiera consultar, esto con el fin de optimizar los tiempos de ejecución y evitar reprocesos innecesarios.
+- El job se ejecuta con un Dyno worker en Heroku.
+- El repositorio del código fuente se encuentra en GitHub en la siguiente [ruta](https://github.com/ferchofpz/clima-planetas-api).
+- Para obtener el listado de planetas y su información, utilizar la siguiente [URL](https://clima-planetas-api.herokuapp.com/clima/planetas).
+- Para obtener el reporte del clima, utilizar la siguiente [URL](https://clima-planetas-api.herokuapp.com/clima/reporte/10) indicando la cantidad de años que se quieren consultar.
+- Para obtener el clima de un día en específico, utilizar la siguiente [URL](https://clima-planetas-api.herokuapp.com/clima/dia/80). Se indicará como "Indefinido" si la posición de los planetas no cumple ninguna de las condiciones dadas.
 
 ## Installation
 
@@ -43,19 +52,9 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
-```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# job execution
+$ npm run job:dev
 ```
 
 ## Support
@@ -64,9 +63,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Fernando Pérez](https://www.linkedin.com/in/ferchofpz/)
 
 ## License
 
